@@ -13,6 +13,15 @@ class UserController {
       next(err);
     }
   }
+
+  async getUsers(_req, res, next) {
+    try {
+      const users = await new UserUseCase(new LocalUserRepository()).getUsers();
+      res.status(200).json(users);
+    } catch (err) {
+      next(err);
+    }
+  }
 }
 
 module.exports = UserController;

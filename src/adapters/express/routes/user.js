@@ -11,6 +11,10 @@ const UserController = require('../controllers/user');
 // Não é o ideal usar o name sendo que temos o id
 // Mas para seguir com a definiçao irei manter
 router.get('/:name', new UserController().getUser);
+router.get('/', new UserController().getUsers);
+router.post('/', new UserController().getUser);
+router.delete('/:name', new UserController().getUser);
+router.put('/:name', new UserController().getUser);
 // router.get('/user/access', teste5);
 
 module.exports = router;

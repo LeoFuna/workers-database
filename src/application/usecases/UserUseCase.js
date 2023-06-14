@@ -16,7 +16,8 @@ class UserUseCase {
   }
 
   async getUsers() {
-    // Lógica para buscar um usuário usando o repositório
+    const users = await this.userRepository.getUsers();
+    return users;
   }
 
   async updateUser(userId, userData) {
