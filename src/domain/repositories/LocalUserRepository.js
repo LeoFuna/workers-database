@@ -25,8 +25,14 @@ class LocalUserRepository extends AbstractUserRepository {
     // Lógica para atualizar um usuário no banco de dados
   }
 
-  async deleteUser(userId) {
-    // Lógica para excluir um usuário do banco de dados
+  async deleteUser(name) {
+    const index = localData.findIndex((user) => user.name === name);
+    const USER_WAS_FOUND = index !== -1;
+    if (!USER_WAS_FOUND) {
+      throw new NotFound();
+    }
+    localData.splice(index, 1);
+    return 'Success';
   }
 }
 

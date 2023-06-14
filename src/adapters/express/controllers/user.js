@@ -35,6 +35,19 @@ class UserController {
       next(err);
     }
   }
+
+  async deleteUser(req, res, next) {
+    try {
+      const name = req.params.name;
+      const deleteResponse = await new UserUseCase(
+        new LocalUserRepository()
+      ).deleteUser(name);
+
+      res.status(200).send(deleteResponse);
+    } catch (err) {
+      next(err);
+    }
+  }
 }
 
 module.exports = UserController;

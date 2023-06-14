@@ -57,8 +57,14 @@ class UserUseCase {
     // Lógica para atualizar um usuário usando o repositório
   }
 
-  async deleteUser(userId) {
-    // Lógica para excluir um usuário usando o repositório
+  async deleteUser(name) {
+    const HAS_VALID_DATA = name && !!name.length;
+    if (!HAS_VALID_DATA) {
+      throw new InvalidData('Name is required!');
+    }
+    const deleteResponse = await this.userRepository.deleteUser(name);
+
+    return deleteResponse;
   }
 }
 

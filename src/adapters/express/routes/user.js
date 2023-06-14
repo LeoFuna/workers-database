@@ -13,7 +13,7 @@ const UserController = require('../controllers/user');
 router.get('/:name', new UserController().getUser);
 router.get('/', new UserController().getUsers);
 router.post('/', new UserController().createUser);
-router.delete('/:name', new UserController().getUser);
+router.delete('/:name', new UserController().deleteUser);
 router.put('/:name', new UserController().getUser);
 // router.get('/user/access', teste5);
 
