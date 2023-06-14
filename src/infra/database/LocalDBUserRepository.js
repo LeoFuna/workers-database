@@ -4,6 +4,11 @@ const fakeData = [
     name: 'João Oliveira',
     job: 'Desenvolvedor',
   },
+  {
+    id: 2,
+    name: 'Leonardo',
+    job: 'Desenvolvedor Backend',
+  },
 ];
 
 module.exports = fakeData;

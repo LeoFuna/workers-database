@@ -22,6 +22,19 @@ class UserController {
       next(err);
     }
   }
+
+  async createUser(req, res, next) {
+    try {
+      const { name, job } = req.body;
+      const userCreated = await new UserUseCase(
+        new LocalUserRepository()
+      ).createUser({ name, job });
+
+      res.status(201).json(userCreated);
+    } catch (err) {
+      next(err);
+    }
+  }
 }
 
 module.exports = UserController;
