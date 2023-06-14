@@ -27,11 +27,12 @@ class InvalidData extends Error {
   apiError = true;
   statusCode = 400;
 
-  constructor() {
+  constructor(message) {
     super();
     Object.setPrototypeOf(this, InvalidData.prototype);
 
     this.name = `${InvalidData.name}`;
+    this.message = message || super.message;
   }
 }
 
