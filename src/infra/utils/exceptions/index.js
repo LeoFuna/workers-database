@@ -11,6 +11,19 @@ class NotFound extends Error {
   }
 }
 
+class Unauthorized extends Error {
+  apiError = true;
+  statusCode = 401;
+
+  constructor() {
+    super();
+    Object.setPrototypeOf(this, Unauthorized.prototype);
+
+    this.name = `${Unauthorized.name}`;
+    this.message = 'Not Authorized!';
+  }
+}
+
 class NotImplemented extends Error {
   apiError = true;
   statusCode = 501;
@@ -40,4 +53,5 @@ module.exports = {
   NotFound,
   NotImplemented,
   InvalidData,
+  Unauthorized,
 };
