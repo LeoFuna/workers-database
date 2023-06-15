@@ -18,12 +18,6 @@ app.use('/', homeRouter);
 app.use('/user', userRouter);
 
 app.use(onError);
-// app.get('/user', teste1.getUser);
-// app.get('/users', teste1.getUsers);
-// app.post('/users', teste2);
-// app.delete('/users', teste3);
-// app.put('/users', teste4);
-// app.get('/users/access', teste5);
 
 const PORT = 3000;
 app.listen(PORT, function () {
