@@ -28,11 +28,12 @@ class NotImplemented extends Error {
   apiError = true;
   statusCode = 501;
 
-  constructor() {
+  constructor(message) {
     super();
     Object.setPrototypeOf(this, NotImplemented.prototype);
 
     this.name = `${NotImplemented.name}`;
+    this.message = message || super.message;
   }
 }
 
