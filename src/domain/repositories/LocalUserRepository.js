@@ -9,9 +9,9 @@ class LocalUserRepository extends AbstractUserRepository {
     return user;
   }
 
-  async getUser(name) {
-    const userFound = localData.find((user) => name === user.name);
-    if (!userFound) throw new NotFound();
+  async getUser(uniqueKey, getBy = 'name') {
+    const userFound = localData.find((user) => uniqueKey === user[getBy]);
+
     return userFound;
   }
 
@@ -21,8 +21,12 @@ class LocalUserRepository extends AbstractUserRepository {
     return users;
   }
 
-  async updateUser(userId, userData) {
-    // Lógica para atualizar um usuário no banco de dados
+  async updateUser(id, userData) {
+    const index = localData.findIndex((user) => user.id === id);
+
+    localData[index] = userData;
+
+    return userData;
   }
 
   async deleteUser(name) {

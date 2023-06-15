@@ -1,4 +1,4 @@
-const { InvalidData } = require('../../infra/utils/exceptions');
+const { InvalidData, NotFound } = require('../../infra/utils/exceptions');
 const User = require('./../../domain/models/User');
 
 class UserUseCase {
@@ -7,14 +7,9 @@ class UserUseCase {
   }
 
   async _checkIfUserAlreadyExists(name) {
-    try {
-      const userFound = await this.userRepository.getUser(name);
-      if (userFound) {
-        throw new InvalidData('Cant create this user, name already exists!');
-      }
-    } catch (err) {
-      if (err.statusCode === 404) return;
-      throw new Error();
+    const userFound = await this.userRepository.getUser(name, 'name');
+    if (userFound) {
+      throw new InvalidData('Cant create this user, name already exists!');
     }
   }
 
@@ -42,9 +37,13 @@ class UserUseCase {
     return createdUser;
   }
 
-  async getUser(name) {
-    if (!name.length) throw new InvalidData('Name is required');
-    const userFound = await this.userRepository.getUser(name);
+  async getUser(uniqueKey, getBy = 'name') {
+    if (typeof uniqueKey === 'string' && !uniqueKey.length) {
+      throw new InvalidData('Unique Key is required');
+    }
+    const userFound = await this.userRepository.getUser(uniqueKey, getBy);
+    if (!userFound) throw new NotFound();
+
     return userFound;
   }
 
@@ -54,7 +53,18 @@ class UserUseCase {
   }
 
   async updateUser(userId, userData) {
-    // Lógica para atualizar um usuário usando o repositório
+    if (!userData?.name.length || !userData?.job.length) {
+      throw new InvalidData('Name and Job are required!');
+    }
+
+    await this.getUser(userId, 'id');
+
+    const userFound = await this.userRepository.getUser(userData.name, 'name');
+    if (userFound) throw new InvalidData('Name has to be unique!');
+
+    const updatedUser = await this.userRepository.updateUser(userId, userData);
+
+    return updatedUser;
   }
 
   async deleteUser(name) {

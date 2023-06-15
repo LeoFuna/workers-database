@@ -48,6 +48,21 @@ class UserController {
       next(err);
     }
   }
+
+  async updateUser(req, res, next) {
+    try {
+      const id = req.params.id;
+      const userData = req.body;
+
+      const updateResponse = await new UserUseCase(
+        new LocalUserRepository()
+      ).updateUser(parseInt(id), userData);
+
+      res.status(200).send(updateResponse);
+    } catch (err) {
+      next(err);
+    }
+  }
 }
 
 module.exports = UserController;
