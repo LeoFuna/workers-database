@@ -1,12 +1,14 @@
 const UserUseCase = require('../../../application/usecases/UserUseCase');
 const LocalUserRepository = require('../../../domain/repositories/LocalUserRepository');
+const LocalUserAccessRepository = require('../../../domain/repositories/LocalUserAcessRepository');
 
 class UserController {
   async getUser(req, res, next) {
     const name = req.params.name;
     try {
       const userFound = await new UserUseCase(
-        new LocalUserRepository()
+        new LocalUserRepository(),
+        new LocalUserAccessRepository()
       ).getUser(name);
       res.status(200).json(userFound);
     } catch (err) {
@@ -16,7 +18,10 @@ class UserController {
 
   async getUsers(_req, res, next) {
     try {
-      const users = await new UserUseCase(new LocalUserRepository()).getUsers();
+      const users = await new UserUseCase(
+        new LocalUserRepository(),
+        new LocalUserAccessRepository()
+      ).getUsers();
       res.status(200).json(users);
     } catch (err) {
       next(err);
@@ -27,7 +32,8 @@ class UserController {
     try {
       const { name, job } = req.body;
       const userCreated = await new UserUseCase(
-        new LocalUserRepository()
+        new LocalUserRepository(),
+        new LocalUserAccessRepository()
       ).createUser({ name, job });
 
       res.status(201).json(userCreated);
@@ -40,7 +46,8 @@ class UserController {
     try {
       const name = req.params.name;
       const deleteResponse = await new UserUseCase(
-        new LocalUserRepository()
+        new LocalUserRepository(),
+        new LocalUserAccessRepository()
       ).deleteUser(name);
 
       res.status(200).send(deleteResponse);
@@ -55,10 +62,26 @@ class UserController {
       const userData = req.body;
 
       const updateResponse = await new UserUseCase(
-        new LocalUserRepository()
+        new LocalUserRepository(),
+        new LocalUserAccessRepository()
       ).updateUser(parseInt(id), userData);
 
       res.status(200).send(updateResponse);
+    } catch (err) {
+      next(err);
+    }
+  }
+
+  async countUserAccess(req, res, next) {
+    try {
+      const name = req.params.name;
+
+      const messageCounted = await new UserUseCase(
+        new LocalUserRepository(),
+        new LocalUserAccessRepository()
+      ).countUserAccess(name);
+
+      res.status(200).send(messageCounted);
     } catch (err) {
       next(err);
     }

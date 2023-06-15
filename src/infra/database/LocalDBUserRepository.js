@@ -11,4 +11,9 @@ const fakeData = [
   },
 ];
 
-module.exports = fakeData;
+const userAccess = [];
+
+module.exports = {
+  fakeData,
+  userAccess,
+};

@@ -2,8 +2,9 @@ const { InvalidData, NotFound } = require('../../infra/utils/exceptions');
 const User = require('./../../domain/models/User');
 
 class UserUseCase {
-  constructor(userRepository) {
+  constructor(userRepository, userAccessRepository) {
     this.userRepository = userRepository;
+    this.userAccessRepository = userAccessRepository;
   }
 
   async _checkIfUserAlreadyExists(name) {
@@ -44,11 +45,16 @@ class UserUseCase {
     const userFound = await this.userRepository.getUser(uniqueKey, getBy);
     if (!userFound) throw new NotFound();
 
+    await this._createNewAccess([userFound]);
+
     return userFound;
   }
 
   async getUsers() {
     const users = await this.userRepository.getUsers();
+
+    await this._createNewAccess(users);
+
     return users;
   }
 
@@ -57,7 +63,7 @@ class UserUseCase {
       throw new InvalidData('Name and Job are required!');
     }
 
-    await this.getUser(userId, 'id');
+    await this.userRepository.getUser(userId, 'id');
 
     const userFound = await this.userRepository.getUser(userData.name, 'name');
     if (userFound) throw new InvalidData('Name has to be unique!');
@@ -75,6 +81,30 @@ class UserUseCase {
     const deleteResponse = await this.userRepository.deleteUser(name);
 
     return deleteResponse;
+  }
+
+  async countUserAccess(name) {
+    await this.userRepository.getUser(name, 'name');
+    const messageCounted = await this.userAccessRepository.countUserAccess(
+      name
+    );
+
+    return messageCounted;
+  }
+
+  async _createNewAccess(users) {
+    if (!users.length) throw new InvalidData('No user to handle acccess!');
+
+    const invalidUser = users.find((user) => !user?.name || !user?.name.length);
+    if (invalidUser) {
+      throw new InvalidData('Name is required on all users to be registered!');
+    }
+
+    const accessPromises = users.map(async (user) =>
+      this.userAccessRepository.createNewAccess(user.name)
+    );
+
+    await Promise.all(accessPromises);
   }
 }
 
