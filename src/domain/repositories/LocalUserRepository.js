@@ -32,10 +32,10 @@ class LocalUserRepository extends AbstractUserRepository {
   async deleteUser(name) {
     const index = fakeData.findIndex((user) => user.name === name);
     const USER_WAS_FOUND = index !== -1;
-    if (!USER_WAS_FOUND) {
-      throw new NotFound();
-    }
+    if (!USER_WAS_FOUND) return;
+
     fakeData.splice(index, 1);
+
     return 'Success';
   }
 }

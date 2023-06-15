@@ -6,7 +6,7 @@ class UserUseCase {
     this.userRepository = userRepository;
     this.userAccessRepository = userAccessRepository;
   }
-
+  // O _ é uma maneira de informar que o método seria privado, ou seja, somente para ser usado dentro da class UserUseCase
   async _checkIfUserAlreadyExists(name) {
     const userFound = await this.userRepository.getUser(name, 'name');
     if (userFound) {
@@ -79,6 +79,7 @@ class UserUseCase {
       throw new InvalidData('Name is required!');
     }
     const deleteResponse = await this.userRepository.deleteUser(name);
+    if (!deleteResponse) throw new NotFound();
 
     return deleteResponse;
   }
