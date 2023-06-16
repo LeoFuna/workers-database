@@ -1,4 +1,4 @@
-const { userAccess } = require('../../infra/database/LocalDBUserRepository');
+const { userAccess } = require('../../infra/database/LocalDB');
 const AbstractUserAccessRepository = require('./AbstractUserAccessRepository');
 // Apesar de nao ser async, estou simulando uma interaçao real com um BD
 

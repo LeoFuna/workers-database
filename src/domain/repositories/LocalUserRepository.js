@@ -1,4 +1,4 @@
-const { fakeData } = require('../../infra/database/LocalDBUserRepository');
+const { fakeData } = require('../../infra/database/LocalDB');
 const AbstractUserRepository = require('./AbstractUserRepository');
 // Apesar de nao ser async, estou simulando uma interaçao real com um BD
 
